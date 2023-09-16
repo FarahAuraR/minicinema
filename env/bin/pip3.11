@@ -1,4 +1,4 @@
-#!/Users/farah/mini_cinema/env/bin/python3.11
+#!/Users/farah/mini_cinema/minicinema/env/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys
