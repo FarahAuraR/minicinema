@@ -12,7 +12,8 @@ def show_main(request):
 
     context = {
         'name' : 'Farah Aura Rosadi',
-        'class' : 'PBP D'
+        'class' : 'PBP D',
+        'items' : items
     }
 
     return render(request, "main.html", context)
