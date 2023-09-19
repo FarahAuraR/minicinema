@@ -334,7 +334,8 @@ urlpatterns = [
 <h1>Mengakses URL Menggunakan Postman dan Screenshot Hasil</h1>
 
 Langkah pertama, saya memastikan server sudah berjalan. Kemudian, saya membuka Postman dan melakukan request baru dengan method `GET` dengan url http://localhost:8000
-[![html.png](https://i.postimg.cc/26989BGT/html.png)](https://postimg.cc/tZPjYJLV)
+[![html1.png](https://i.postimg.cc/vBM5DT2t/html1.png)](https://postimg.cc/2qc1KkD1)
+[![html2.png](https://i.postimg.cc/GtT3CJP7/html2.png)](https://postimg.cc/8fDgdv0M)
 
 Selanjutnya, url http://localhost:8000/xml
 [![xml.png](https://i.postimg.cc/prNXttNn/xml.png)](https://postimg.cc/xJRSKh10)
