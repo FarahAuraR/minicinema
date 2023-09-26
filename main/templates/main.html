@@ -10,12 +10,30 @@
     <p>{{class}}</p>
     
     <h4>You've added {{ items.count }} movie(s) to your Mini Cinema experience!</h4>
-    <table>
+    <style>
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border-bottom: 1px solid rgb(122, 89, 89);
+        }
+        
+        tr:hover {background-color: #e6c7b3;}
+        </style>
+
+    <table style="width:60%">
         <tr>
             <th>Name</th>
             <th>Amount</th>
             <th>Price</th>
             <th>Description</th>
+            <th>Add Item</th>
+            <th>Reduce Item</th>
+            <th>Remove Item</th>
         </tr>
     
         {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
@@ -26,6 +44,30 @@
                 <td>{{item.amount}}</td>
                 <td>{{item.price}}</td>
                 <td>{{item.description}}</td>
+                <td>
+                    <form action="{% url 'main:add_item' item.id %}" method = "post">
+                        {% csrf_token %}
+                        <button style="align-items: center" type = "submit" name = "add">
+                            add
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'main:reduce_item' item.id %}" method = "post">
+                        {% csrf_token %}
+                        <button style="align-items: center" type = "submit" name="reduce">
+                            reduce
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'main:remove_item' item.id %}" method = "post">
+                        {% csrf_token %}
+                        <button style="align-items: center" type = "submit" name="remove">
+                            remove
+                        </button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
     </table>
@@ -37,5 +79,11 @@
             Add New Item
         </button>
     </a>
+    <a href="{% url 'main:logout' %}">
+        <button>
+            Logout
+        </button>
+    </a>
+    <h5>Last login: {{ last_login }}</h5>
     
     {% endblock content %}
