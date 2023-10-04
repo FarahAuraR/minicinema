@@ -6,40 +6,50 @@
 
 {% block content %}
 
-<div class = "login">
-
-    <h1>Login</h1>
-
-    <form method="POST" action="">
-        {% csrf_token %}
-        <table>
-            <tr>
-                <td>Username: </td>
-                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
-            </tr>
-                    
-            <tr>
-                <td>Password: </td>
-                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td><input class="btn login_btn" type="submit" value="Login"></td>
-            </tr>
-        </table>
-    </form>
-
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}     
-        
-    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
-
-</div>
+<body>
+    <section class="hero is-fullheight" style="background-image: url(https://i.pinimg.com/originals/b5/e5/10/b5e51001ad4dd6ba8cad6af65c7e301e.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+        <div class="hero-body has-text-centered is-flex is-justify-content-center is-align-items-center" >
+            <div class="card">
+                <div class="card-content">
+                <div class="login">
+                    <img src="https://i.postimg.cc/C55QGxm3/273-2738704-gambar-kepala-karakter-upin-ipin-format-png-kepala-upin-ipin-png-removebg-preview.png" width="150" height="150">
+                    <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="field">
+                        <div class="control">
+                        <input class="input is-medium is-rounded" type="text" name="username" placeholder="username" autocomplete="username" required />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                        <input class="input is-medium is-rounded" type="password" name="password" placeholder="**********" autocomplete="current-password" required />
+                        </div>
+                    </div>
+                    <br />
+                    <button class="button is-block is-fullwidth is-primary is-medium is-rounded" type="submit" value="Login">
+                        Login
+                    </button>
+                    </form>
+                    {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}     
+                    <br>
+                    <nav class="level">
+                    <div class="level-item has-text-centered">
+                        <div>
+                        Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+                        </div>
+                    </div>
+                    </nav>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
 
 {% endblock content %}

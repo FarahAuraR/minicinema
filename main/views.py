@@ -16,6 +16,8 @@ from django.urls import reverse
 
 from main.models import Item
 
+from django.contrib.auth.models import User
+
 @login_required(login_url='/login')
 def show_main(request):
     items = Item.objects.filter(user=request.user)
@@ -58,16 +60,26 @@ def show_json_by_id(request, id):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def register(request):
-    form = UserCreationForm()
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
 
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your account has been successfully created!')
-            return redirect('main:login')
-    context = {'form':form}
-    return render(request, 'register.html', context)
+        if password == confirm_password:
+            if User.objects.filter(username=username).exists():
+                messages.info(request, 'Username taken')
+                return redirect('main:register')
+            else:
+                user = User.objects.create_user(username=username, password=password)
+                user.save()
+                messages.success(request, 'Your account has been successfully created!')
+                return redirect('main:login')
+
+        else:
+            messages.info(request, 'Password not matching..')
+            return redirect('main:register')
+    else:
+        return render(request, 'register.html')
 
 def login_user(request):
     if request.method == 'POST':
@@ -109,4 +121,27 @@ def remove_item(request, item_id):
     if request.method == 'POST' and 'remove' in request.POST:
         item = Item.objects.get(id = item_id)
         item.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def edit_item(request, id):
+    # Get product berdasarkan ID
+    item = Item.objects.get(pk = id)
+
+    # Set product sebagai instance dari form
+    form = ItemForm(request.POST or None, instance=item)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_item.html", context)
+
+def delete_item(request, id):
+    # Get data berdasarkan ID
+    item = Item.objects.get(pk = id)
+    # Hapus data
+    item.delete()
+    # Kembali ke halaman awal
     return HttpResponseRedirect(reverse('main:show_main'))

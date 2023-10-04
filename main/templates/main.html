@@ -1,89 +1,136 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Welcome to Mini Cinema</h1>
+<body>
+    <div class="hero is-info is-fullheight"  style="background-image: url(https://i.ibb.co/hDdJ64K/sl-121019-25870-67.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;" >
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="">
+                            <img src="https://i.postimg.cc/C55QGxm3/273-2738704-gambar-kepala-karakter-upin-ipin-format-png-kepala-upin-ipin-png-removebg-preview.png" alt="Logo">
+                        </a>
+                    </div>
+                    <div id="navbarMenu" class="navbar-menu">
+                        <div class="navbar-end">
+                            <span class="navbar-item">
+                                <a class="button is-white is-outlined" href="{% url 'main:logout' %}">
+                                    <span>Logout</span>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            </div>
+            
+                    <div class="hero-body">
+                        <div class="container has-text-centered is-centered">
+                            <div class="">
+                                <h1 class="title">
+                                    Mini Cinema
+                                </h1>
+                                <h2 class="subtitle">
+                                    Your pocket-sized portal to the world of mesmerizing movies. Experience the magic of cinema, anytime, anywhere!
+                                </h2>
+                                <h6>You've added {{ items.count }} movie(s) to your Mini Cinema experience!</h6>
+                            
+                                    <table class="custom-table is-striped is-narrow is-hoverable is-fullwidth">
+                                        <style>
+                                            table {
+                                                width: 100%;
+                                            }
+                                
+                                            .custom-table {
+                                                background-color: #754747; 
+                                                border-collapse: collapse;
+                                                border-radius: 7px; 
+                                                overflow: hidden;
+                                                margin-bottom: 30px; 
+                                            }
+                                        
+                                            .custom-table th, .custom-table td {
+                                                border: 1px solid #5d4848; 
+                                                padding: 8px;
+                                                text-align: center;
+                                            }
+                                        
+                                            .custom-table th {
+                                                background-color: #cbacac; 
+                                                border: #574040;
+                                            }
+                                        
+                                            .custom-table tr {
+                                                background-color: #ac8686;
+                                                border: 1px solid #958787; 
+                                            }
+                                            .custom-table tbody tr:last-child {
+                                                background-color: #875757;
+                                            }
 
-    <h5>Name:</h5>
-    <p>{{name}}</p>
+                                            .button.is-small {
+                                                margin-right: 10px; 
+                                            }
 
-    <h5>Class:</h5>
-    <p>{{class}}</p>
     
-    <h4>You've added {{ items.count }} movie(s) to your Mini Cinema experience!</h4>
-    <style>
-        table {
-          border-collapse: collapse;
-          width: 100%;
-        }
-        
-        th, td {
-          padding: 8px;
-          text-align: left;
-          border-bottom: 1px solid rgb(122, 89, 89);
-        }
-        
-        tr:hover {background-color: #e6c7b3;}
-        </style>
+                                        </style>
+                                        
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Price</th>
+                                                <th>Amount</th>
+                                                <th>Add Item</th>
+                                                <th>Reduce Item</th>
+                                                <th>Remove Item</th>
+                                                <th>Edit Item</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            {% for item in items %}
+                                            <tr>
+                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.description }}</td>
+                                                <td>{{ item.price }}</td>
+                                                <td>{{ item.amount }}</td>
+                                                <td>
+                                                    <form action="{% url 'main:add_item' item.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button class="button is-small is-warning" type="submit" name="add">+</button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <form action="{% url 'main:reduce_item' item.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button class="button is-small is-warning" type="submit" name="reduce">-</button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <form action="{% url 'main:remove_item' item.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button class="button is-small is-danger" type="submit" name="remove">Remove</button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'main:edit_item' item.pk %}" class="button is-small is-info">Edit</a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <a href="{% url 'main:create_item' %}"  class="button is-small is-success">
+                                            Add New Item
+                                    </a>
+                                    <a href="{% url 'main:logout' %}"  class="button is-small is-danger">
+                                        Logout
+                                    </a>
+                                    <h6>Last login: {{ last_login }}</h6>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+    <script async type="text/javascript" src="../js/bulma.js"></script>
+</body>
 
-    <table style="width:60%">
-        <tr>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Add Item</th>
-            <th>Reduce Item</th>
-            <th>Remove Item</th>
-        </tr>
-    
-        {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
-    
-        {% for item in items %}
-            <tr>
-                <td>{{item.name}}</td>
-                <td>{{item.amount}}</td>
-                <td>{{item.price}}</td>
-                <td>{{item.description}}</td>
-                <td>
-                    <form action="{% url 'main:add_item' item.id %}" method = "post">
-                        {% csrf_token %}
-                        <button style="align-items: center" type = "submit" name = "add">
-                            add
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    <form action="{% url 'main:reduce_item' item.id %}" method = "post">
-                        {% csrf_token %}
-                        <button style="align-items: center" type = "submit" name="reduce">
-                            reduce
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    <form action="{% url 'main:remove_item' item.id %}" method = "post">
-                        {% csrf_token %}
-                        <button style="align-items: center" type = "submit" name="remove">
-                            remove
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    
-    <br />
-    
-    <a href="{% url 'main:create_item' %}">
-        <button>
-            Add New Item
-        </button>
-    </a>
-    <a href="{% url 'main:logout' %}">
-        <button>
-            Logout
-        </button>
-    </a>
-    <h5>Last login: {{ last_login }}</h5>
-    
-    {% endblock content %}
+{% endblock content %}

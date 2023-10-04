@@ -1,11 +1,14 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
+
+{% load static %}
 
 {% block content %}
+
 <body style="background-color:rgb(176, 100, 92); margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center;">
     <div class="card" style="background-color:rgb(243, 227, 226);">
         <div class="card-body">
-            <h1 class="text-center">Add Movie</h1>
-            <form method="POST" class="mt-4" >
+            <h1 class="text-center">Edit Item</h1>
+            <form method="POST" class="mt-4">
                 {% csrf_token %}
                 <table class="mx-auto">
                     {{ form.as_table }}
@@ -13,7 +16,7 @@
                         <td class="py-3"></td>
                         <td class="py-3">
                             <div>
-                                <input type="submit" value="Add Movie" class="text-black py-2 px-4 rounded focus:outline-none"/>
+                                <input type="submit" value="Edit Item" class="text-black py-2 px-4 rounded focus:outline-none" />
                             </div>
                         </td>
                     </tr>
@@ -22,4 +25,5 @@
         </div>
     </div>
 </body>
+
 {% endblock %}

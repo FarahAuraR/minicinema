@@ -639,3 +639,376 @@ Implementasi bonus untuk menambahkan amount dan menghapus suatu objek dari inven
 
 </details>
 
+<details>
+<summary>TUGAS 5</summary>
+<h1>Manfaat dari Element Selector dan Waktu Penggunaannya</h1>
+	
+Elemen Selector adalah selector CSS untuk mencari semua tag HTML pada bagian – bagian tertentu, fungsinya untuk `mengatur suatu elemen pada HTML untuk diberikan style` seperti warna (color), size, jenis font dan lainnya. Selector jenis ini cirinya memiliki behavior yang universal artinya nanti akan `memberikan style yang sama pada seluruh elemen HTML`, contoh mengganti warna teks untuk semua elemen `<h1>` dengan CSS sebagai berikut.
+
+```
+h1 {
+    color: blue;
+}
+```
+
+Elemen selector sebaiknya digunakan saat ingin `mengatur gaya dasar` untuk jenis elemen tertentu ataupun `mengatur gaya global` yang berlaku untuk semua elemen dengan jenis yang sama dalam suatu halaman web.
+
+<h1>HTML5 Tag</h1>
+
+`HTML5` merupakan sebuah teknologi penerus dari generasi sebelumnya yang dikeluarkan oleh W3C (World Wide Web Consortium) dan WHATWG (Web Hypertext Application Technology Working Group) dengan tambahan feature baru untuk memperbaiki dan `melengkapi dari HTML versi sebelumnya`.
+
+`HTML5 tag` adalah `elemen-elemen` yang digunakan dalam dokumen HTML5 untuk mengatur dan menampilkan konten pada halaman web. Setiap tag HTM 5 memiliki fungsi dan peran tertentu dalam struktur dan presentasi halaman web. Berikut beberapa tag HTML5 :
+
+  * Tag `<section>` : dokumen atau aplikasi bagian generik. Hal ini dapat digunakan bersama-sama dengan h1-h6 untuk menunjukkan struktur dokumen.
+  * Tag `<article>` : sepotong independen isi dokumen, seperti sebuah blog atau artikel koran.
+  * Tag `<aside>` : gambaran dari sebagian konten yang berhubungan dengan isi halaman.
+  * Tag `<header>` : bagian kepala dari dokumen.
+  * Tag `<footer>` : bagian catatan kaki yang dapat berisi informasi tentang penulis, informasi hak cipta, dll
+  * Tag `<nav>` : bagian dari dokumen yang dimaksudkan untuk memudahkan dalam proses navigasi.
+  * Tag `<figure>` : menghubungkan keterangan bersama-sama dengan beberapa konten tertanam, seperti gambar atau video.
+
+<h1>Perbedaan Margin dan Padding</h1>
+
+Perbedaan antara padding dan margin terletak pada `cara masing-masing memberikan jarak`. Padding memberikan jarak kedalam, sedangkan margin memberikan jarak keluar. Lebih jelasnya, Margin berfungsi untuk mengatur jarak antara satu elemen dengan elemen lainnya pada HTML, sedangkan Padding berrfungsi untuk memberikan jarak di antara elemen HTML yang ada di dalamnya atau ruang di dalam tag HTML. Jadi, Padding mempengaruhi elemen itu sendiri, memperluas atau mengurangi ruang di dalam elemen, sementara Margin mempengaruhi elemen dalam konteks hubungannya dengan elemen-elemen lain di sekitarnya.
+
+<h1>Perbedaan Framework CSS Tailwind dan Bootstrap serta Waktu Penggunaannya</h1>
+
+`Bootstrap` adalah kerangka kerja CSS yang menyediakan kelas-kelas CSS dan komponen yang telah dirancang sebelumnya, cocok untuk proyek dengan desain tradisional yang membutuhkan stabilitas dan kemudahan penggunaan. Namun, hal ini dapat memiliki keterbatasan dalam fleksibilitas desain yang unik dan memiliki ukuran file yang lebih besar. Sementara itu, `Tailwind` adalah pendekatan "utility-first" yang memberikan fleksibilitas lebih besar dengan kombinasi class utilitas yang spesifik, memungkinkan pengguna untuk membangun desain yang sangat kustom sesuai kebutuhan. Tailwind dirancang untuk lebih ringan dalam hal ukuran file. Namun, ketika kita menggunakan banyak class utilitas dalam kode, ukuran file CSS dapat meningkat.
+
+Sebaiknya kita menggunakan `Bootstrap` ketika kita memiliki proyek dengan desain tradisional yang membutuhkan kerangka kerja yang stabil dan mudah digunakan, serta jika kita menginginkan banyak komponen yang telah dirancang sebelumnya. Sebaliknya, kita sebaiknya menggunakan `Tailwind` ketika kita ingin memiliki fleksibilitas yang lebih besar dalam membangun desain yang sangat kustom sesuai kebutuhan, dengan kendali penuh atas gaya dan tata letak, terutama jika proyek memiliki kebutuhan desain yang unik.
+
+<h1>Step-by-Step Mengimplementasikan Tugas</h1>
+
+Saya melakukan kustomisasi desain dengan menggunakan CSS framework yaitu Bulma. Langkah pertama yang lakukan yaitu instalasi Bulma dengan membuka `base.html` dan menambahkan :
+
+`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">`
+
+<h2>Custom Login Page</h2>
+
+[![Screen-Shot-2023-10-04-at-08-52-32.png](https://i.postimg.cc/D0McMw0H/Screen-Shot-2023-10-04-at-08-52-32.png)](https://postimg.cc/YLQg4k1z)
+
+Pada halaman login, saya mengimplementasikannya dengan membungkus menggunakan card. Selain itu, saya juga mengganti background dengan gambar dan edit beberapa bagian untuk memperbagus tampilan.
+
+```html
+<body>
+    <section class="hero is-fullheight" style="background-image: url(https://i.pinimg.com/originals/b5/e5/10/b5e51001ad4dd6ba8cad6af65c7e301e.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+        <div class="hero-body has-text-centered is-flex is-justify-content-center is-align-items-center" >
+            <div class="card">
+                <div class="card-content">
+                <div class="login">
+                    <img src="https://i.postimg.cc/C55QGxm3/273-2738704-gambar-kepala-karakter-upin-ipin-format-png-kepala-upin-ipin-png-removebg-preview.png" width="150" height="150">
+                    <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="field">
+                        <div class="control">
+                        <input class="input is-medium is-rounded" type="text" name="username" placeholder="username" autocomplete="username" required />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                        <input class="input is-medium is-rounded" type="password" name="password" placeholder="**********" autocomplete="current-password" required />
+                        </div>
+                    </div>
+                    <br />
+                    <button class="button is-block is-fullwidth is-primary is-medium is-rounded" type="submit" value="Login">
+                        Login
+                    </button>
+                    </form>
+                    {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}     
+                    <br>
+                    <nav class="level">
+                    <div class="level-item has-text-centered">
+                        <div>
+                        Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+                        </div>
+                    </div>
+                    </nav>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+```
+
+<h2>Custom Register Page</h2>
+
+[![Screen-Shot-2023-10-04-at-08-52-44.png](https://i.postimg.cc/JhMjKkKt/Screen-Shot-2023-10-04-at-08-52-44.png)](https://postimg.cc/Sn1XxjBp)
+
+Pada halaman register, saya juga mengimplementasikannya dengan membungkus menggunakan card. Selain itu, saya juga mengganti background dengan gambar dan menggunakan style untuk memperbagus tampilan.
+
+```html
+<body>
+    <section class="container" style="background-image: url(https://i.pinimg.com/originals/b5/e5/10/b5e51001ad4dd6ba8cad6af65c7e301e.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+      <div class="columns is-multiline">
+        <div class="column is-8 is-offset-2 register">
+          <div class="columns">
+            <div class="column left">
+              <h1 class="title is-1">Mini Cinema</h1>
+              <h4 class="subtitle colored is-4">Your pocket-sized portal to the world of mesmerizing movies. Experience the magic of cinema, anytime, anywhere!</h4>
+            </div>
+            <div class="column right has-text-centered">
+              <h1 class="title is-4">Sign up today</h1>
+              <p class="description">Create your account by filling the form below.</p>
+              <form method="POST" action="{% url 'main:register' %}">
+                {% csrf_token %}
+                <div class="field">
+                  <div class="control">
+                    <input class="input is-medium" type="text" placeholder="username" id="username" name="username">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="control">
+                    <input class="input is-medium" type="password" placeholder="password" id="password" name="password">
+                  </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                      <input class="input is-medium" type="password" placeholder="confirm password" id="confirm_password" name="confirm_password">
+                    </div>
+                  </div>
+
+                <button class="button is-block is-primary is-fullwidth is-medium" value="Daftar">Submit</button>
+                <br />
+                <small><em>Already have an account? <a href="{% url 'main:login' %}">Login</a> </em></small>
+            </form>
+            {% if messages %}  
+            <ul>   
+                {% for message in messages %}  
+                    <li>{{ message }}</li>  
+                {% endfor %}  
+            </ul>   
+            {% endif %}
+          
+            </div>
+          </div>
+        </div>
+        <div class="column is-8 is-offset-2">
+          <br>
+            <div class="level-right">
+              <small class="level-item" style="color: var(--textLight)">
+                &copy; Farah Aura Rosadi - 2206824773
+              </small>
+            </div>
+
+        </div>
+      </div>
+    </section>
+  </body>
+```
+
+<h2>Custom Add Item Page</h2>
+
+[![Screen-Shot-2023-10-04-at-08-52-20.png](https://i.postimg.cc/FHJTw3jZ/Screen-Shot-2023-10-04-at-08-52-20.png)](https://postimg.cc/RW41H3p6)
+
+[![Screen-Shot-2023-10-04-at-08-53-20.png](https://i.postimg.cc/QN20LSqy/Screen-Shot-2023-10-04-at-08-53-20.png)](https://postimg.cc/dD98r2p2)
+
+Pada halaman add item dan edit item, saya hanya mengimplementasikan dengan menggunakan card dan mengganti warna background.
+
+Add Item :
+```html
+<body style="background-color:rgb(176, 100, 92); margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <div class="card" style="background-color:rgb(243, 227, 226);">
+        <div class="card-body">
+            <h1 class="text-center">Add Movie</h1>
+            <form method="POST" class="mt-4" >
+                {% csrf_token %}
+                <table class="mx-auto">
+                    {{ form.as_table }}
+                    <tr>
+                        <td class="py-3"></td>
+                        <td class="py-3">
+                            <div>
+                                <input type="submit" value="Add Movie" class="text-black py-2 px-4 rounded focus:outline-none"/>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</body>
+```
+
+Edit Item :
+```html
+<body style="background-color:rgb(176, 100, 92); margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <div class="card" style="background-color:rgb(243, 227, 226);">
+        <div class="card-body">
+            <h1 class="text-center">Edit Item</h1>
+            <form method="POST" class="mt-4">
+                {% csrf_token %}
+                <table class="mx-auto">
+                    {{ form.as_table }}
+                    <tr>
+                        <td class="py-3"></td>
+                        <td class="py-3">
+                            <div>
+                                <input type="submit" value="Edit Item" class="text-black py-2 px-4 rounded focus:outline-none" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</body>
+```
+
+
+<h2>Custom Main Page</h2>
+
+Pada main page, tidak jauh berbeda dengan tugas sebelumnya, saya hanya memperindah tampilan dengan merapihkan posisi textnya, posisi tabel, memberikan warna pada tabel, dan memberikan background.
+
+[![Screen-Shot-2023-10-04-at-08-49-26.png](https://i.postimg.cc/jSGFjZsm/Screen-Shot-2023-10-04-at-08-49-26.png)](https://postimg.cc/9DYp8PwY)
+
+```html
+<body>
+    <div class="hero is-info is-fullheight"  style="background-image: url(https://i.ibb.co/hDdJ64K/sl-121019-25870-67.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;" >
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="">
+                            <img src="https://i.postimg.cc/C55QGxm3/273-2738704-gambar-kepala-karakter-upin-ipin-format-png-kepala-upin-ipin-png-removebg-preview.png" alt="Logo">
+                        </a>
+                    </div>
+                    <div id="navbarMenu" class="navbar-menu">
+                        <div class="navbar-end">
+                            <span class="navbar-item">
+                                <a class="button is-white is-outlined" href="{% url 'main:logout' %}">
+                                    <span>Logout</span>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            </div>
+            
+                    <div class="hero-body">
+                        <div class="container has-text-centered is-centered">
+                            <div class="">
+                                <h1 class="title">
+                                    Mini Cinema
+                                </h1>
+                                <h2 class="subtitle">
+                                    Your pocket-sized portal to the world of mesmerizing movies. Experience the magic of cinema, anytime, anywhere!
+                                </h2>
+                                <h6>You've added {{ items.count }} movie(s) to your Mini Cinema experience!</h6>
+                            
+                                    <table class="custom-table is-striped is-narrow is-hoverable is-fullwidth">
+                                        <style>
+                                            table {
+                                                width: 100%;
+                                            }
+                                
+                                            .custom-table {
+                                                background-color: #754747; 
+                                                border-collapse: collapse;
+                                                border-radius: 7px; 
+                                                overflow: hidden;
+                                                margin-bottom: 30px; 
+                                            }
+                                        
+                                            .custom-table th, .custom-table td {
+                                                border: 1px solid #5d4848; 
+                                                padding: 8px;
+                                                text-align: center;
+                                            }
+                                        
+                                            .custom-table th {
+                                                background-color: #cbacac; 
+                                                border: #574040;
+                                            }
+                                        
+                                            .custom-table tr {
+                                                background-color: #ac8686;
+                                                border: 1px solid #958787; 
+                                            }
+                                            .custom-table tbody tr:last-child {
+                                                background-color: #875757;
+                                            }
+
+                                            .button.is-small {
+                                                margin-right: 10px; 
+                                            }
+
+    
+                                        </style>
+                                        
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Price</th>
+                                                <th>Amount</th>
+                                                <th>Add Item</th>
+                                                <th>Reduce Item</th>
+                                                <th>Remove Item</th>
+                                                <th>Edit Item</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody >
+                                            {% for item in items %}
+                                            <tr class="custom-row{% if forloop.last %} last-row{% endif %}">
+                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.description }}</td>
+                                                <td>{{ item.price }}</td>
+                                                <td>{{ item.amount }}</td>
+                                                <td>
+                                                    <form action="{% url 'main:add_item' item.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button class="button is-small is-warning" type="submit" name="add">+</button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <form action="{% url 'main:reduce_item' item.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button class="button is-small is-warning" type="submit" name="reduce">-</button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <form action="{% url 'main:remove_item' item.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button class="button is-small is-danger" type="submit" name="remove">Remove</button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'main:edit_item' item.pk %}" class="button is-small is-info">Edit</a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <a href="{% url 'main:create_item' %}"  class="button is-small is-success">
+                                            Add New Item
+                                    </a>
+                                    <a href="{% url 'main:logout' %}"  class="button is-small is-danger">
+                                        Logout
+                                    </a>
+                                    <h6>Last login: {{ last_login }}</h6>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+    <script async type="text/javascript" src="../js/bulma.js"></script>
+</body>
+```
+<h2>Bonus</h2>
+Untuk bonus, pada bagian style saya menambahkan kode berikut untuk memberikan warna yang berbeda hanya pada baris terakhir tabel.
+
+```html
+.custom-table tbody tr:last-child {
+	background-color: #875757;
+}
+```
+</details>
