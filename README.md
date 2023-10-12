@@ -1016,6 +1016,8 @@ Untuk bonus, pada bagian style saya menambahkan kode berikut untuk memberikan wa
 <details>
 <summary>TUGAS 6</summary>
 
+<h2>link    : http://farah-aura-tugas.pbp.cs.ui.ac.id</h2>
+
 <h1>Perbedaan Asynchronous Programming dan Synchronous Programming</h1>
 
 `Asynchronous Programming` adalah metode modern yang memungkinkan tugas-tugas berjalan secara independen, tanpa harus menunggu tugas sebelumnya selesai sehingga menghasilkan waktu eksekusi yang lebih cepat. Sebaliknya, `Synchronous Programming` memerlukan tugas untuk berjalan berurutan, yang dapat mengakibatkan penundaan dalam pelaksanaan. Meskipun pemrograman asinkron cenderung lebih cepat dalam eksekusi program, namun ada beberapa hal yang perlu diperhatikan, seperti kompleksitas kode yang bisa meningkat karena penanganan kesalahan (error handling). Pemahaman yang baik tentang manfaat dan tantangan dari kedua pendekatan ini bergantung pada kebutuhan proyek dan kompleksitasnya.
