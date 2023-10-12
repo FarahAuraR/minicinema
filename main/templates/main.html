@@ -1,136 +1,197 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<body>
-    <div class="hero is-info is-fullheight"  style="background-image: url(https://i.ibb.co/hDdJ64K/sl-121019-25870-67.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;" >
-        <div class="hero-head">
-            <nav class="navbar">
-                <div class="container">
-                    <div class="navbar-brand">
-                        <a class="navbar-item" href="">
-                            <img src="https://i.postimg.cc/C55QGxm3/273-2738704-gambar-kepala-karakter-upin-ipin-format-png-kepala-upin-ipin-png-removebg-preview.png" alt="Logo">
-                        </a>
-                    </div>
-                    <div id="navbarMenu" class="navbar-menu">
-                        <div class="navbar-end">
-                            <span class="navbar-item">
-                                <a class="button is-white is-outlined" href="{% url 'main:logout' %}">
-                                    <span>Logout</span>
-                                </a>
-                            </span>
-                        </div>
+<div class="hero is-info is-fullheight" style="background-image: url(https://i.ibb.co/hDdJ64K/sl-121019-25870-67.jpg); background-size: cover; background-repeat: no-repeat; background-position: center;">
+    <div class="hero-head">
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="">
+                        <img src="https://i.postimg.cc/C55QGxm3/273-2738704-gambar-kepala-karakter-upin-ipin-format-png-kepala-upin-ipin-png-removebg-preview.png" alt="Logo">
+                    </a>
+                </div>
+                <div id="navbarMenu" class="navbar-menu">
+                    <div class="navbar-end">
+                        <span class="navbar-item">
+                            <a class="button is-white is-outlined" href="{% url 'main:logout' %}">
+                                <span>Logout</span>
+                            </a>
+                        </span>
                     </div>
                 </div>
-            </nav>
             </div>
-            
-                    <div class="hero-body">
-                        <div class="container has-text-centered is-centered">
-                            <div class="">
-                                <h1 class="title">
-                                    Mini Cinema
-                                </h1>
-                                <h2 class="subtitle">
-                                    Your pocket-sized portal to the world of mesmerizing movies. Experience the magic of cinema, anytime, anywhere!
-                                </h2>
-                                <h6>You've added {{ items.count }} movie(s) to your Mini Cinema experience!</h6>
+        </nav>
+    </div>
+
+    <div class="hero-body">
+        <div class="container has-text-centered is-centered">
+            <div>
+                <h1 class="title">
+                    Mini Cinema
+                </h1>
+                <h2 class="subtitle">
+                    Your pocket-sized portal to the world of mesmerizing movies. Experience the magic of cinema, anytime, anywhere!
+                </h2>
+                <h6>You've added <span id="item-count"></span> movie(s) with <span id="ticket-count"></span> ticket(s) to your Mini Cinema experience!</h6>
+
+                <div class="columns is-multiline" id="item_table">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+
+                <a href="{% url 'main:create_item' %}" class="button is-success">
+                    Add New Item
+                </a>
+                <button type="button" class="button is-success" id="addItemButton">
+                    Add New Item by AJAX
+                </button>
+                <a href="{% url 'main:logout' %}" class="button is-danger">
+                    Logout
+                </a>
+                <h6>Last login: {{ last_login }}</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Adding New Product -->
+<div class="modal" id="exampleModal">
+    <div class="modal-background" id="closeModal"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Add New Item</p>
+            <button class="delete" aria-label="close" id="cancelButton"></button>
+        </header>
+        <section class="modal-card-body">
+            <form id="form">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="name" class="label">Name:</label>
+                    <div class="control">
+                        <input class="input" type="text" id="name" name="name">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="description" class="label">Description:</label>
+                    <div class="control">
+                        <textarea class="textarea" id="description" name="description"></textarea>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="price" class="label">Price:</label>
+                    <div class="control">
+                        <input class="input" type="number" id="price" name="price">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="amount" class="label">Amount:</label>
+                    <div class="control">
+                        <input class="input" type="number" id="amount" name="amount">
+                    </div>
+                </div>
+            </form>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" id="button_add">Add Product</button>
+            <button class="button" aria-label="close" id="cancelButton">Cancel</button>
+        </footer>
+    </div>
+</div>
+
+<script>
+    async function getItems() {
+        return fetch("{% url 'main:get_item_json' %}").then((res) => res.json());
+    }
+
+    async function refreshItems() {
+        const items = await getItems();
+        let totalTickets = 0;
+        let totalItems = items.length;
+        let htmlString = "";
+        items.forEach((item, index) => {
+            totalTickets += item.amount;
+            htmlString += `
+                <div class="column is-one-third ${index === items.length - 1 ? 'bg-blue-200' : ''}">
+                    <div class="card" style="background-color: #f1eacc; border: 1px solid #bd9189;">
+                        <div class="card-content">
+                            <p class="title has-text-black">${item.name}</p>
+                            <p class="subtitle has-text-black">${item.description}</p>
+                            <p class="has-text-weight-bold">Price: ${item.price}</p>
                             
-                                    <table class="custom-table is-striped is-narrow is-hoverable is-fullwidth">
-                                        <style>
-                                            table {
-                                                width: 100%;
-                                            }
-                                
-                                            .custom-table {
-                                                background-color: #754747; 
-                                                border-collapse: collapse;
-                                                border-radius: 7px; 
-                                                overflow: hidden;
-                                                margin-bottom: 30px; 
-                                            }
-                                        
-                                            .custom-table th, .custom-table td {
-                                                border: 1px solid #5d4848; 
-                                                padding: 8px;
-                                                text-align: center;
-                                            }
-                                        
-                                            .custom-table th {
-                                                background-color: #cbacac; 
-                                                border: #574040;
-                                            }
-                                        
-                                            .custom-table tr {
-                                                background-color: #ac8686;
-                                                border: 1px solid #958787; 
-                                            }
-                                            .custom-table tbody tr:last-child {
-                                                background-color: #875757;
-                                            }
+                            <!--controls for this item-->
+                            
+                            <div class="price-amount-controls">
 
-                                            .button.is-small {
-                                                margin-right: 10px; 
-                                            }
-
-    
-                                        </style>
-                                        
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Description</th>
-                                                <th>Price</th>
-                                                <th>Amount</th>
-                                                <th>Add Item</th>
-                                                <th>Reduce Item</th>
-                                                <th>Remove Item</th>
-                                                <th>Edit Item</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody >
-                                            {% for item in items %}
-                                            <tr>
-                                                <td>{{ item.name }}</td>
-                                                <td>{{ item.description }}</td>
-                                                <td>{{ item.price }}</td>
-                                                <td>{{ item.amount }}</td>
-                                                <td>
-                                                    <form action="{% url 'main:add_item' item.id %}" method="post">
-                                                        {% csrf_token %}
-                                                        <button class="button is-small is-warning" type="submit" name="add">+</button>
-                                                    </form>
-                                                </td>
-                                                <td>
-                                                    <form action="{% url 'main:reduce_item' item.id %}" method="post">
-                                                        {% csrf_token %}
-                                                        <button class="button is-small is-warning" type="submit" name="reduce">-</button>
-                                                    </form>
-                                                </td>
-                                                <td>
-                                                    <form action="{% url 'main:remove_item' item.id %}" method="post">
-                                                        {% csrf_token %}
-                                                        <button class="button is-small is-danger" type="submit" name="remove">Remove</button>
-                                                    </form>
-                                                </td>
-                                                <td>
-                                                    <a href="{% url 'main:edit_item' item.pk %}" class="button is-small is-info">Edit</a>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                    <a href="{% url 'main:create_item' %}"  class="button is-small is-success">
-                                            Add New Item
-                                    </a>
-                                    <a href="{% url 'main:logout' %}"  class="button is-small is-danger">
-                                        Logout
-                                    </a>
-                                    <h6>Last login: {{ last_login }}</h6>
+                                <button onclick="decrementAmount(${item.pk})" class="button is-warning is-small">-</button>
+                                <span id="amount${item.pk}" class="text-lg font-semibold">${item.amount}</span>
+                                <button onclick="incrementAmount(${item.pk})" class="button is-warning is-small" id="button_add">+</button>
+                               
                             </div>
                         </div>
+                        <footer class="card-footer is-centered" style="background-color: #caa99b;">
+                            <div class="card-footer-item">
+                                <a href="${item.edit_url}" class="button is-info">Edit</a>
+                            </div>
+                        
+                            <div class="card-footer-item">
+                                <button onclick="deleteItem(${item.pk})" class="button is-danger">Delete</button>
+                            </div>
+                        </footer>
                     </div>
-        </div>
-    <script async type="text/javascript" src="../js/bulma.js"></script>
-</body>
+                </div>`;
+        });
+        document.getElementById("ticket-count").textContent = totalTickets;
+        document.getElementById("item-count").textContent = totalItems;
+        document.getElementById("item_table").innerHTML = htmlString;
+    }
 
-{% endblock content %}
+    async function incrementAmount(id) {
+        const response = await fetch(`/add-item/${id}`);
+        refreshItems();
+    }
+
+    async function decrementAmount(id) {
+        const response = await fetch(`/reduce-item/${id}`);
+        refreshItems();
+    }
+
+    async function deleteItem(id) {
+        const response = await fetch(`/delete-item/${id}`);
+        refreshItems();
+    }
+
+    function addItem() {
+        fetch("{% url 'main:add_item_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(() => {
+            refreshItems();
+            document.getElementById("form").reset(); 
+            document.getElementById("exampleModal").classList.remove("is-active");
+        });
+        return false;
+    }
+
+        document.getElementById("button_add").onclick = addItem;
+        
+        document.getElementById("addItemButton").onclick = function () {
+            // Tampilkan modal saat tombol "Add New Item by AJAX" ditekan.
+            document.getElementById("exampleModal").classList.add("is-active");
+        };
+        
+        // Tampilkan modal saat tombol "Add New Item by AJAX" ditekan.
+        document.getElementById("addItemButton").onclick = function () {
+            document.getElementById("exampleModal").classList.add("is-active");
+        };
+        
+        // Tutup modal saat tombol "Cancel" atau latar belakang modal ditekan.
+        document.getElementById("cancelButton").onclick = function () {
+            document.getElementById("exampleModal").classList.remove("is-active");
+        };
+        document.getElementById("closeModal").onclick = function () {
+            document.getElementById("exampleModal").classList.remove("is-active");
+        };
+
+        // Perbarui item saat halaman dimuat.
+        refreshItems();
+    </script>
+{% endblock %}

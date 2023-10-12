@@ -1,9 +1,9 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.core import serializers
 from django.http import HttpResponseRedirect
 from main.forms import ItemForm
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
@@ -13,6 +13,12 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
+from main.forms import ItemForm
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
 
 from main.models import Item
 
@@ -103,17 +109,16 @@ def logout_user(request):
     return response
 
 def add_item(request, item_id):
-    if request.method == 'POST' and 'add' in request.POST:
-        item = Item.objects.get(id = item_id)
+    item = get_object_or_404(Item, pk=item_id)
+    if item.amount >= 0:
         item.amount += 1
         item.save()
     return HttpResponseRedirect(reverse('main:show_main'))
 
 def reduce_item(request, item_id):
-    if request.method == 'POST' and 'reduce' in request.POST:
-        item = Item.objects.get(id = item_id)
-        if item.amount > 0 :
-            item.amount -= 1
+    item = get_object_or_404(Item, pk=item_id)
+    if item.amount > 0:
+        item.amount -= 1
         item.save()
     return HttpResponseRedirect(reverse('main:show_main'))
 
@@ -145,3 +150,37 @@ def delete_item(request, id):
     item.delete()
     # Kembali ke halaman awal
     return HttpResponseRedirect(reverse('main:show_main'))
+
+def get_item_json(request):
+    items = Item.objects.filter(user=request.user)
+    item_list = []
+    for item in items:
+        item_dict = {
+            'pk': item.pk,
+            'name': item.name,
+            'description': item.description,
+            'price': item.price,
+            'amount': item.amount,
+            'edit_url': reverse('main:edit_item', args=[item.pk]),
+            'delete_url': reverse('main:delete_item', args=[item.pk]),
+        }
+        item_list.append(item_dict)
+    return JsonResponse(item_list, safe=False)
+
+...
+@csrf_exempt
+def add_item_ajax(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST)
+
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
+            return HttpResponse("Created", status=201)
+        else:
+            # Handle form validation errors and return as JSON
+            errors = form.errors.as_json()
+            return HttpResponseBadRequest(errors, content_type='application/json')
+
+    return HttpResponseNotFound()
