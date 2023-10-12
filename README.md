@@ -1012,3 +1012,295 @@ Untuk bonus, pada bagian style saya menambahkan kode berikut untuk memberikan wa
 }
 ```
 </details>
+
+<details>
+<summary>TUGAS 6</summary>
+
+<h1>Perbedaan Asynchronous Programming dan Synchronous Programming</h1>
+
+`Asynchronous Programming` adalah metode modern yang memungkinkan tugas-tugas berjalan secara independen, tanpa harus menunggu tugas sebelumnya selesai sehingga menghasilkan waktu eksekusi yang lebih cepat. Sebaliknya, `Synchronous Programming` memerlukan tugas untuk berjalan berurutan, yang dapat mengakibatkan penundaan dalam pelaksanaan. Meskipun pemrograman asinkron cenderung lebih cepat dalam eksekusi program, namun ada beberapa hal yang perlu diperhatikan, seperti kompleksitas kode yang bisa meningkat karena penanganan kesalahan (error handling). Pemahaman yang baik tentang manfaat dan tantangan dari kedua pendekatan ini bergantung pada kebutuhan proyek dan kompleksitasnya.
+
+<h1>Event-Driven Programming</h1>
+
+Dalam penerapan JavaScript dan AJAX, paradigma `event-driven programming` digunakan untuk merespons peristiwa pengguna seperti klik mouse, interaksi pengguna, atau permintaan data dari server. Paradigma ini adalah pendekatan di mana aplikasi menjalankan fungsi atau tindakan yang telah ditentukan sebelumnya saat peristiwa-peristiwa ini terjadi. Hal ini memungkinkan pengembangan aplikasi web yang responsif, interaktif, dan dinamis di mana pengguna dapat berinteraksi dengan elemen halaman dan melihat perubahan seketika tanpa perlu memuat ulang seluruh halaman. Contoh penerapannya dalam tugas ini adalah saat pengguna mengklik tombol "Add New Item by AJAX," sebuah fungsi JavaScript bernama addItem akan dijalankan untuk mengirim permintaan AJAX dan menambahkan item ke aplikasi web tanpa harus memuat ulang seluruh halaman.
+
+<h1>Penerapan Asynchronous Programming pada AJAX</h1>
+
+`Penerapan asynchronous programming pada AJAX` (Asynchronous JavaScript and XML) adalah pendekatan yang memungkinkan permintaan data dari server untuk berjalan secara asinkron yang berarti eksekusi kode JavaScript dapat terus berlanjut tanpa harus menunggu respons dari server. Penerapan asynchronous programming pada AJAX sangat penting dalam mengatasi keterbatasan kinerja yang terkait dengan permintaan data atau sumber daya dari server tanpa menghalangi atau memblokir eksekusi kode JavaScript lainnya. Hal ini dicapai dengan menggunakan metode seperti callbacks, promises, dan event listeners untuk menangani respons dari permintaan dengan efisien. Dengan demikian, aplikasi web dapat tetap responsif dan pengguna dapat berinteraksi dengan antarmuka tanpa gangguan.
+ 
+<h1>Fetch API dan Library jQuery</h1>
+
+Penerapan AJAX menggunakan Fetch API dan jQuery memiliki beberapa perbedaan. `Fetch API` adalah bagian dari JavaScript modern tanpa dependensi tambahan, menawarkan pendekatan promise-based yang mempermudah penanganan kode asinkron dan lebih ringan dalam hal ukuran, menghasilkan performa yang lebih baik. Selain itu, Fetch API mendukung sepenuhnya format JSON yang umum dalam pengembangan aplikasi web modern. Di sisi lain, `jQuery` adalah library JavaScript dengan sintaksis sederhana, cocok untuk pemula, dan difokuskan pada kompatibilitas browser, mendukung berbagai browser termasuk yang lebih lama. jQuery juga memiliki ekosistem plugin yang luas.
+
+
+Pemilihan antara Fetch API dan jQuery `tergantung pada kebutuhan proyeknya`. Untuk pengembangan aplikasi web modern dengan fokus pada performa, Fetch API adalah pilihan yang lebih baik karena kemampuan native dan pendekatan promise-based. Namun, jika proyek harus mendukung browser lama, maka jQuery masih relevan dan dapat menghemat waktu dalam menangani perbedaan perilaku browser. Seringkali perpaduan dari keduanya juga merupakan opsi yang baik, dengan menggunakan Fetch API untuk permintaan data asinkron yang dasar dan jQuery untuk tugas-tugas lain yang lebih spesifik. Oleh karena itu, daam memilih antara Fetch API dan jQuery penting untuk mempertimbangkan tujuan, kebutuhan, tingkat kompleksitas, dan konteks proyeknya.
+
+
+
+<h1>Mengubah Tugas Sebelumnya Menjadi Menggunakan AJAX</h1>
+<h2>Mengubah Kode Cards Data Item agar Mendukung AJAX GET dan Melakukan Pengambilan Task Menggunakan AJAX GET</h2>
+
+Langkah pertama yang saya lakukan yaitu dengan membuka `main.html` dan mengubah pengimplementasian cards dengan mengimplementasikan AJAX GET pada `<script>`
+
+`<div class="columns is-multiline" id="item_table"> </div>`
+
+```html
+<script>
+    async function getItems() {
+        return fetch("{% url 'main:get_item_json' %}").then((res) => res.json());
+    }
+
+    async function refreshItems() {
+        const items = await getItems();
+        let totalTickets = 0;
+        let totalItems = items.length;
+        let htmlString = "";
+        items.forEach((item, index) => {
+            totalTickets += item.amount;
+            htmlString += `
+                <div class="column is-one-third ${index === items.length - 1 ? 'bg-blue-200' : ''}">
+                    <div class="card" style="background-color: #f1eacc; border: 1px solid #bd9189;">
+                        <div class="card-content">
+                            <p class="title has-text-black">${item.name}</p>
+                            <p class="subtitle has-text-black">${item.description}</p>
+                            <p class="has-text-weight-bold">Price: ${item.price}</p>
+                            
+                            <!--controls for this item-->
+                            
+                            <div class="price-amount-controls">
+
+                                <button onclick="decrementAmount(${item.pk})" class="button is-warning is-small">-</button>
+                                <span id="amount${item.pk}" class="text-lg font-semibold">${item.amount}</span>
+                                <button onclick="incrementAmount(${item.pk})" class="button is-warning is-small" id="button_add">+</button>
+                               
+                            </div>
+                        </div>
+                        <footer class="card-footer is-centered" style="background-color: #caa99b;">
+                            <div class="card-footer-item">
+                                <a href="${item.edit_url}" class="button is-info">Edit</a>
+                            </div>
+                        
+                            <div class="card-footer-item">
+                                <button onclick="deleteItem(${item.pk})" class="button is-danger">Delete</button>
+                            </div>
+                        </footer>
+                    </div>
+                </div>`;
+        });
+        document.getElementById("ticket-count").textContent = totalTickets;
+        document.getElementById("item-count").textContent = totalItems;
+        document.getElementById("item_table").innerHTML = htmlString;
+    }
+
+    async function incrementAmount(id) {
+        const response = await fetch(`/add-item/${id}`);
+        refreshItems();
+    }
+
+    async function decrementAmount(id) {
+        const response = await fetch(`/reduce-item/${id}`);
+        refreshItems();
+    }
+
+    async function deleteItem(id) {
+        const response = await fetch(`/delete-item/${id}`);
+        refreshItems();
+    }
+
+    function addItem() {
+        fetch("{% url 'main:add_item_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(() => {
+            refreshItems();
+            document.getElementById("form").reset(); 
+            document.getElementById("exampleModal").classList.remove("is-active");
+        });
+        return false;
+    }
+
+        document.getElementById("button_add").onclick = addItem;
+        
+        document.getElementById("addItemButton").onclick = function () {
+		document.getElementById("exampleModal").classList.add("is-active");
+        };
+        
+        document.getElementById("addItemButton").onclick = function () {
+            document.getElementById("exampleModal").classList.add("is-active");
+        };
+        
+        document.getElementById("cancelButton").onclick = function () {
+            document.getElementById("exampleModal").classList.remove("is-active");
+        };
+        document.getElementById("closeModal").onclick = function () {
+            document.getElementById("exampleModal").classList.remove("is-active");
+        };
+
+        refreshItems();
+    </script>
+```
+
+<h2>Membuat Tombol yang Membuka Sebuah Modal dengan Form untuk Menambahkan Item</h2>
+
+Pada tahap ini, saya membuka file `main.html` dan menambahkan tombol `Add New Item by AJAX`
+```html
+<button type="button" class="button is-success" id="addItemButton">
+    Add New Item by AJAX
+</button>
+```
+Saya juga membuat modal dengan form untuk menambahkan item seperti sebagai berikut.
+```html
+<div class="modal" id="exampleModal">
+    <div class="modal-background" id="closeModal"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Add New Item</p>
+            <button class="delete" aria-label="close" id="cancelButton"></button>
+        </header>
+        <section class="modal-card-body">
+            <form id="form">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="name" class="label">Name:</label>
+                    <div class="control">
+                        <input class="input" type="text" id="name" name="name">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="description" class="label">Description:</label>
+                    <div class="control">
+                        <textarea class="textarea" id="description" name="description"></textarea>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="price" class="label">Price:</label>
+                    <div class="control">
+                        <input class="input" type="number" id="price" name="price">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="amount" class="label">Amount:</label>
+                    <div class="control">
+                        <input class="input" type="number" id="amount" name="amount">
+                    </div>
+                </div>
+            </form>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" id="button_add">Add Product</button>
+            <button class="button" aria-label="close" id="cancelButton">Cancel</button>
+        </footer>
+    </div>
+</div>
+```
+
+Saya juga menambahkan `function addItem()` agar item bisa muncul, seperti sebagai berikut. 
+```javascript
+    function addItem() {
+        fetch("{% url 'main:add_item_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(() => {
+            refreshItems();
+            document.getElementById("form").reset(); 
+            document.getElementById("exampleModal").classList.remove("is-active");
+        });
+        return false;
+    }
+```
+  
+           
+
+<h2>Membuat Fungsi View Baru untuk Nenambahkan Item Baru ke dalam Basis Data</h2>
+Berikut adalah fungsi untuk membuat object item baru dengan parameter sesuai values dari request.
+
+```javascript
+@csrf_exempt
+def add_item_ajax(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST)
+
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
+            return HttpResponse("Created", status=201)
+        else:
+            # Handle form validation errors and return as JSON
+            errors = form.errors.as_json()
+            return HttpResponseBadRequest(errors, content_type='application/json')
+
+    return HttpResponseNotFound()
+```
+
+<h2>Membuat Path /create-ajax/ yang Mengarah ke Fungsi View add_item_ajax(request) dan Menghubungkan Form yang telah dibuat di dalam Modal ke Path /create-ajax/</h2>
+
+Dalam pengimplementasiannya, saya membuka file `urls.py`. Lalu, saya menambahkan baris berikut di dalam urlspattern.
+
+`path('create-ajax/', add_item_ajax, name='add_item_ajax')`
+
+
+<h2>Melakukan Refresh pada Halaman Utama secara Asinkronus untuk Menampilkan Daftar Item Terbaru tanpa Reload Halaman Utama secara Keseluruhan</h2>
+
+Dalam melakukan tugas ini, saya memanggil function `refreshItems();` untuk yang berfungsi untuk memperbarui daftar item di dalam elemen HTML dengan ID `item_table` secara dinamis dengan data terbaru dari server. Berikut isi dari functionnya.
+```javascript
+ async function refreshItems() {
+        const items = await getItems();
+        let totalTickets = 0;
+        let totalItems = items.length;
+        let htmlString = "";
+        items.forEach((item, index) => {
+            totalTickets += item.amount;
+            htmlString += `
+                <div class="column is-one-third ${index === items.length - 1 ? 'bg-blue-200' : ''}">
+                    <div class="card" style="background-color: #f1eacc; border: 1px solid #bd9189;">
+                        <div class="card-content">
+                            <p class="title has-text-black">${item.name}</p>
+                            <p class="subtitle has-text-black">${item.description}</p>
+                            <p class="has-text-weight-bold">Price: ${item.price}</p>
+                            
+                            <!--controls for this item-->
+                            
+                            <div class="price-amount-controls">
+
+                                <button onclick="decrementAmount(${item.pk})" class="button is-warning is-small">-</button>
+                                <span id="amount${item.pk}" class="text-lg font-semibold">${item.amount}</span>
+                                <button onclick="incrementAmount(${item.pk})" class="button is-warning is-small" id="button_add">+</button>
+                               
+                            </div>
+                        </div>
+                        <footer class="card-footer is-centered" style="background-color: #caa99b;">
+                            <div class="card-footer-item">
+                                <a href="${item.edit_url}" class="button is-info">Edit</a>
+                            </div>
+                        
+                            <div class="card-footer-item">
+                                <button onclick="deleteItem(${item.pk})" class="button is-danger">Delete</button>
+                            </div>
+                        </footer>
+                    </div>
+                </div>`;
+        });
+        document.getElementById("ticket-count").textContent = totalTickets;
+        document.getElementById("item-count").textContent = totalItems;
+        document.getElementById("item_table").innerHTML = htmlString;
+    }
+```
+
+
+<h2>Melakukan Perintah Collectstatic</h2>
+
+Pada tahap ini, pertama saya membuka `settings.py` dan memastikan sudah ada baris `STATIC_ROOT = os.path.join(BASE_DIR, 'static')`. Kemudian, saya lanjutkan dengan membuka terminal direktori dan mengaktifkan virtual environment, lalu menjalankan perintah `python manage.py collectstatic`
+
+
+<h2>BONUS</h2>
+
+Dalam mengimplementasikan bonus, saya menambahkan function delete item dengan menggunakan `AJAX DELETE`
+
+```javascript
+    async function deleteItem(id) {
+        const response = await fetch(`/delete-item/${id}`);
+        refreshItems();
+    }
+```
+
