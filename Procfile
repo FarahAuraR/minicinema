@@ -1,2 +1,2 @@
 release: django-admin migrate --noinput
-web: gunicorn minicinema.wsgi
+web: gunicorn mini_cinema.wsgi
