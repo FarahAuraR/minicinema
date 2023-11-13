@@ -54,7 +54,7 @@
 </div>
 
 <!-- Modal for Adding New Product -->
-<div class="modal" id="exampleModal">
+<div class="modal" id="addModal">
     <div class="modal-background" id="closeModal"></div>
     <div class="modal-card">
         <header class="modal-card-head">
@@ -166,7 +166,7 @@
         }).then(() => {
             refreshItems();
             document.getElementById("form").reset(); 
-            document.getElementById("exampleModal").classList.remove("is-active");
+            document.getElementById("addModal").classList.remove("is-active");
         });
         return false;
     }
@@ -175,20 +175,20 @@
         
         document.getElementById("addItemButton").onclick = function () {
             // Tampilkan modal saat tombol "Add New Item by AJAX" ditekan.
-            document.getElementById("exampleModal").classList.add("is-active");
+            document.getElementById("addModal").classList.add("is-active");
         };
         
         // Tampilkan modal saat tombol "Add New Item by AJAX" ditekan.
         document.getElementById("addItemButton").onclick = function () {
-            document.getElementById("exampleModal").classList.add("is-active");
+            document.getElementById("addModal").classList.add("is-active");
         };
         
         // Tutup modal saat tombol "Cancel" atau latar belakang modal ditekan.
         document.getElementById("cancelButton").onclick = function () {
-            document.getElementById("exampleModal").classList.remove("is-active");
+            document.getElementById("addModal").classList.remove("is-active");
         };
         document.getElementById("closeModal").onclick = function () {
-            document.getElementById("exampleModal").classList.remove("is-active");
+            document.getElementById("addModal").classList.remove("is-active");
         };
 
         // Perbarui item saat halaman dimuat.
